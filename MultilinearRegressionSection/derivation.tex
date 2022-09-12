@@ -1,0 +1,66 @@
+\subsection{Finding the best fit for a given data set}
+
+We are given $n$ points where each point $P_i=[(x_i)_1,...,(x_i)_k,y_i]$ is in $\mathbb{R}^{k+1}$. Going forward we will simply refer to $x_i=[(x_i)_1,...,(x_i)_k]$ and $y_i$. We will find a general algorithm for an affine mapping
+$$A(x_i)=a_0+a_1(x_i)_1+...+a_k(x_i)_k$$
+that makes $\sum(A(x_i) - y_i)^2$ as small as possible. This optimized $A$ is the least squares estimate of the relationship between $x$ and $y$. For the sake of keeping things readable I will adopt the convention that $(x_i)_0:=1$ for all $x_i$, which allows us to write $A(x_i)$ with a single sum.
+\begin{align}
+	A(x_i)&=\sum_{j=0}^ka_j(x_i)_j\label{A as sum}
+\end{align}
+
+Why do we minimize the sum of the squares of the errors rather than the absolute values of the errors? First, it is possible in general to find an affine mapping that minimizes the sum of squares of these errors assuming that we have a broad enough sample whereas it is not possible to solve for the minimal absolute errors in general. Second, we can use linear algebra to solve this problem whereas the other problem would result in all sorts of piecewise defined operations and messy computations involving ranges of values.
+
+Finding the least squares estimate still seems like a tall task, even if it is simpl\emph{er} than minimizing the absolute errors. Let's take this one bite at a time. Select a single $a_p$ from these values and instead ask, ``what value of $a_p$ will make $\sum(A(x_i) - y_i)^2$ as small as possible if all of the other $a_0,...,a_{p-1},a_{p+1},...,a_k$ remain the same?"
+
+In that case you're just looking at a sum of squared errors function
+$$E(a_p):=\sum_{i=1}^n((s_i)_p + (x_i)_pa_p)^2$$
+where $(s_i)_p$ can be written in terms of numbers that have been fixed in place and
+\begin{align}
+	(s_i)_p+(x_i)_pa_p&=A(x_i) - y_i.\label{sip def}
+\end{align}
+This is a function of just the single number $a_p$ and we can ask ``What is the minimum value of $E(a_p)$?'' The simple answer is that this minimum occurs where the derivative is zero. The word derivative makes this sound scary, but we just need to know that
+\begin{align*}
+	\frac{\partial}{\partial a_p}((s_i)_p + (x_i)_pa_p)^2&=2(x_i)_p((s_i)_p + (x_i)_pa_p)\\
+	&=2(x_i)_p(A(x_i)-y_i)\text{ (applying equation \ref{sip def})}
+\end{align*}
+and therefore
+$$\frac{\partial}{\partial a_p}\sum_{i=1}^n((s_i)_p + (x_i)_pa_p)^2=\sum_{i=1}^n2(x_i)_p(A(x_i)-y_i).$$
+This provides us with one equation for each $p\in\{0,...,k\}$ of the form
+\begin{align}
+	0&=\frac{\partial}{\partial a_p}\sum_{i=1}^n((s_i)_p + (x_i)_pa_p)^2\\
+	&=\sum_{i=1}^n2(x_i)_p(A(x_i)-y_i)\\
+	0&=\sum_{i=0}^n(x_i)_p(A(x_i)-y_i).\label{eq for a_p}
+\end{align}
+Now combine equations (\ref{A as sum}) and (\ref{eq for a_p}) to get the following for each $p$.
+\begin{align}
+	0&=\sum_{i=1}^n(x_i)_p\left[\left(\sum_{j=0}^{k}a_j(x_i)_j\right)-y_i\right]\\
+	\sum_{i=1}^n(x_i)_py_i&=\sum_{j=0}^k\left(\sum_{i=1}^n(x_i)_p(x_i)_j\right)a_j \label{lin sys original}
+\end{align}
+The equation (\ref{lin sys original}) can be further simplified if you define
+\begin{align}
+	\Phi(p,j)&:=\sum_{i=1}^n(x_i)_p(x_i)_j\text{ and}\\
+	\Upsilon(p)&:=\sum_{i=1}^n(x_i)_py_i.
+\end{align}
+
+Note that all of these $\Phi(p,j)$ and $\Upsilon(p)$ values may be computed based on the values $x_i$ and $y_i$, which are just the measured values. With this notation equation (\ref{lin sys original}) becomes the following.
+\begin{align}
+\Phi(p,0)a_0+\Phi(p,1)a_1+...+\Phi(p,k)a_k&=\Upsilon(p)\label{lin sys}
+\end{align}
+
+This provides one linear equation and one value $a_p$ for each of the $k+1$ indices $p\in\{0,...,k\}$.
+
+If there exists a unique linear function that minimizes $\sum(A(x_i) - y_i)^2$, then it must satisfy all of the equations (\ref{lin sys}). Conversely, if any linear function satisfies equations (\ref{lin sys}), then it will be \emph{a} best solution for $\sum(A(x_i) - y_i)^2$ (that is, it will be tied for best). Therefore this system will be solvable exactly when there is a unique linear mapping that minimizes $\sum(A(x_i) - y_i)^2$.
+
+To finally solve the equations (\ref{lin sys}) define a matrix
+$$M:=\begin{bmatrix}
+\Phi(0,0)&...&\Phi(0,k)&\Upsilon(0)\\
+\vdots&&\vdots&\vdots\\
+\Phi(k,0)&...&\Phi(k,k)&\Upsilon(k)
+\end{bmatrix}$$
+and use row operations to reduce it to reduced row echelon form (see Section \ref{reduced row echelon})
+$$M_{\text{solved}}=\begin{bmatrix}
+1&0&...&0&a_0\\
+0&1&...&0&a_1\\
+\vdots&\vdots&&\vdots&\vdots\\
+0&0&...&1&a_k
+\end{bmatrix}$$
+where $A(x):=a_0+x\cdot[a_1,...,a_k]$.

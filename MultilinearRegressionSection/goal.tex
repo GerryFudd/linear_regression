@@ -1,0 +1,5 @@
+\subsection{The goal of a multilinear regression}
+
+We have a collection of many data points $\{(x_1, y_1),...,(x_n, y_n)\}$ where each data point $(x_i, y_i)$ consists of several inputs $(x_i)_1,...,(x_i)_k$ and a single output $y_i$. We assume that there is an affine relationship between the independent values and the output value such that
+$$A(x_i):=a_0+a_1(x_i)_1+...+a_k(x_i)_k$$
+provides a better estimate of $y_i$ than simply taking the mean $\overline{y}$ of all of the observed values $\{y_1,...,y_n\}$. We ideally want the error $\left|A(x_i) - y_i\right|$ as small as possible for any given pair $(x_i, y_i)$.

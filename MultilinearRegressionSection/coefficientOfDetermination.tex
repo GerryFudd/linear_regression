@@ -1,0 +1,88 @@
+\subsection{The coefficient of determination}
+
+The ``coefficient of determination'' is defined in terms of some elementary concepts from statistics. You can't get far in statistics without referring to a ``distribution'', which I will only refer to informally because we don't need to interact with the more abstract versions of this concept. Any time we perform a computation that involves a ``distribution'', we will use the simplest version of the concept. We will take a set of measurements and construct a distribution that only has the values that we measure and we assume that each of our measurements has an equal probability of occurring.
+
+\begin{definition}[MEAN, $\overline{X}$]
+	The MEAN of a distribution $X$ is the center of gravity of the values in the distribution. For a finite distribution $X$ where the values $\{x_i,...,x_n\}$ each occur with equal probability $\frac{1}{n}$ the MEAN of $X$ is denoted $\overline{X}$ and it may be computed in the following way.
+	$$\overline{X}:=\sum_{i=1}^n\frac{x_i}{n}$$
+\end{definition}
+
+\begin{definition}[VARIANCE, $\sigma^2$]
+	The VARIANCE of a distribution $X$, denoted $\sigma_X^2$, is a measurement of how spread out a distribution is from its mean $\overline{X}$. It is formally defined as the mean of a new distribution $(X-\overline{X})^2$.
+    
+    For a finite distribution with outputs $\{x_1,...,x_n\}$ that each occur with probability $\frac{1}{n}$ we take the mean of a distribution with outputs
+    $$\left\{(x_1-\overline{X})^2,...,(x_n-\overline{X})^2\right\}$$
+    that each occur with probability $\frac{1}{n}$. The variance of this finite distribution $X$ is then computed by the following formula.
+	$$\sigma_X^2:=\sum_{i=1}^n\frac{(x_i-\overline{X})^2}{n}$$
+\end{definition}
+
+The ``coefficient of determination'' for coupled data is an indicator of how strongly correlated the distributions $X$ and $Y$ are. Its values are based on comparing the variance of $Y$ by its self to the variance of a new distribution $Y(X=C)$ where its outputs are just the ones that occur when $X$ is fixed at some constant value $C$.
+
+\begin{definition}[COEFFICIENT OF DETERMINATION, $r^2$]
+Suppose that $X$ is an independent variable (where each sample of this variable may be an ordered list of numbers), $Y$ is a dependent variable (where each sample is a single number), and $\widehat{Y}=A(X)$ is the affine mapping that represents the least squared error estimate of $Y$.
+
+In general the COEFFICIENT OF DETERMINATION, denoted $r^2$, for $X$ and $Y$ is the fraction of the variance $\sigma_Y^2$ that is removed if you consider the variance $\sigma_{Y-\widehat{Y}}^2$ of $Y-\widehat{Y}$ instead.
+\end{definition}
+
+This coefficient of determination may be calculated directly as the ratio of the difference $\sigma_Y^2-\sigma_{Y-\widehat{Y}}^2$ to the overall variance $\sigma_Y^2$, which reduces to
+$$r^2:=1-\frac{\sigma_{Y-\widehat{Y}}^2}{\sigma_Y^2}$$
+
+It seems like this should involve an absolute value to avoid negative results, but this is not necessary since the affine function $\widehat{Y}=A(X)$ is optimized to make $\sigma_{Y-\widehat{Y}}^2$ as small as possible. Since $A_0(X):=\overline{Y}$ is an example of an affine function, $\sigma_{Y-\overline{Y}}^2$ is necessarily larger than the variance of differences $\sigma_{Y-\widehat{Y}}^2$ when the least squares estimate is used by definition. Furthermore $\sigma_Y^2$ is identical to $\sigma_{Y-\overline{Y}}^2$ since the mean of $Y-\overline{Y}$ is 0. This means that $r^2$ is always some value between $0$ and $1$. It will be closer to 1 if the optimal affine mapping $A$ makes $\sigma_{Y-\widehat{Y}}^2$ small compared to $\sigma_Y^2$ and it will be closer to 0 if $\sigma_{Y-\widehat{Y}}^2$ is not much smaller than $\sigma_Y^2$.
+
+\begin{definition}[SUM OF SQUARES OF THE ERROR, $\sserr$, TOTAL SUM OF SQUARES, $\sstot$]
+Consider a finite sample $\{(x_1,y_1),...,(x_n,y_n)\}$ of paired data where $Y$ is a finite distribution $\{y_1,...,y_n\}$ and $X$ is a finite distribution $\{x_1,...,x_n\}$. As usual define $\widehat{Y}=A(X)$ to be the least squared error estimate of $Y$ where $\widehat{y_i}=A(x_i)$.
+
+The TOTAL SUM OF SQUARES, denoted $\sstot$, is
+$$\sstot=n\sigma_Y^2=\sum_{i=1}^n(y_i-\overline{Y})^2$$
+and the SUM OF SQUARES OF THE ERROR, denoted $\sserr$, is
+$$\sserr=n\sigma_{Y-\widehat{Y}}^2=\sum_{i=1}^n(y_i-\widehat{y_i})^2.$$
+\end{definition}
+
+If this finite sample were the entire population, then the coefficient of determination for the affine model $A$ would be the following (since the sample size $n$ cancels).
+$$r^2=1-\frac{\sserr}{\sstot}$$
+
+This $r^2$ value has a problem if we use it to estimate the coefficient of determination for the overall population based on just a finite sample. Naturally the variance $\sigma_Y^2$ for a general distribution will be different from the variance $\sigma_{Y^*}^2$ for a finite distribution $Y^*$ that is based on just a sample of $n$ values from $Y$. Likewise the least squared error estimate will be slightly different for different finite samples and will not match the true least squared error for the overall distribution.
+
+Consider an extreme case where we measure 2 independent variables $x_1$ and $x_2$ and are therefore finding an affine function $A(x_i)=a_0+x_i\cdot[a_1,a_2]$. If we only take 3 samples (and use finite distributions $X^*$ and $Y^*$ based off of these three values to determine $A$), this is the same as finding 2-d plane in 3 dimensions that passes through 3 points. It will always be possible to find a plane that hits all three points exactly. In this extreme case the model $\widehat{Y^*}=A(X^*)$ has no degrees of freedom. The error for the sample $Y^*-\widehat{Y^*}$ will never have any variance because the model is artificially removing all of the variance.
+
+\begin{definition}[DEGREES OF FREEDOM, $df_A$]
+The number of DEGREES OF FREEDOM in a best fit model $A$ of a finite sample is the size of the sample minus the number of parameters in $A$. Said differently, the DEGREES OF FREEDOM is a count of how many of the individual samples $(x_i,y_i)$ contribute to $\sserr$.
+
+Specifically, if each $x_i\in X^*$ is comprised of $k$ variables $(x_i)_1,...,(x_i)_k$, then $A$ will be an affine function with $k+1$ parameters
+$$A(x_i)=a_0+a_1(x_i)_1+...+a_k(x_i)_k$$
+and will exactly match a sample with exactly $k+1$ points. Therefore the number of samples in $\{(x_1,y_1),...,(x_n,y_n)\}$ that contribute to $\sserr$ will be
+$$df_A=n-k-1.$$
+\end{definition}
+
+If we knew the true mean $\overline{Y}$ of an overall distribution $Y$, then a finite distribution $Y^*$ of $n$ values $\{y_1,...,y_n\}$ from $Y$ would result in a model $Y^*-\overline{Y}$ with $n$ degrees of freedom and $\sum_{i=1}^n(y_i-\overline{Y})^2/n$ would be the best estimate of $\sigma_Y^2$. In the real world we don't ever get to know the true mean of $Y$. Instead we use a finite sample $Y^*$ and use $\overline{Y^*}$ as a best guess for $\overline{Y}$. Then we compensate for the fact that $\overline{Y^*}$ is based on $n-1$ degrees of freedom and estimate the variance of $Y$ by replacing the $n$ and $\overline{Y}$ in the variance formula with with the estimate $\overline{Y^*}$ and degrees of freedom $n-1$ in our model to get our estimated variance
+$${\sigma^*_Y}^2=\sum_{i=1}^n\frac{(y_i-\overline{Y^*})^2}{n-1}$$
+as close to the true variance as possible.
+
+\begin{definition}[ADJUSTED VARIANCE, ${\sigma^*}^2_{Y-\widehat{Y}}$]
+    The ADJUSTED VARIANCE for the error of an affine mapping $\widehat{Y^*}=A(X^*)$ from a variable $X$ to a variable $Y$ based on a finite sample $(X^*,Y^*)$ is
+    $${\sigma^*}^2_{Y-\widehat{Y}}=\frac{\sum_{i=1}^n(y_i-\widehat{y_i})^2}{df_A}.$$
+\end{definition}
+
+The adjusted variance for the error of model $\widehat{Y^*}=A(X^*)$ with $k$ parameters based on finite distributions $(X^*,Y^*)$ with $n$ samples is
+$${\sigma^*}_{Y-\widehat{Y}}^2=\frac{\sserr}{n-k-1}.$$
+
+\begin{definition}[ADJUSTED COEFFICIENT OF DETERMINATION, ${r^*}^2$]
+    The ADJUSTED COEFFICIENT OF DETERMINATION is the fraction of the adjusted variance ${\sigma^*}^2_Y$ that is removed in the adjusted variance of the error of the model ${\sigma^*}_{Y-\widehat{Y}}^2$. This is denoted
+    $${r^*}^2=\frac{{\sigma^*}^2_Y-{\sigma^*}_{Y-\widehat{Y}}^2}{{\sigma^*}^2_Y}.$$
+\end{definition}
+The resulting formula for the adjusted coefficient of determination is
+\begin{align*}
+    {r^*}^2&=\frac{{\sigma^*}^2_Y-{\sigma^*}_{Y-\widehat{Y}}^2}{{\sigma^*}^2_Y}\\
+    &=1-\frac{\sserr/(n-k-1)}{\sstot/(n-1)}\\
+    &=1-\frac{(n-1)\sserr}{(n-k-1)\sstot}
+\end{align*}
+
+Since we assume that each $x_i\in\mathbb{R}^k$ is really made up of $k$ distinct measurements, we would also like to know how each of these measurements does at improving our prediction. This is based on the relative $\sserr$ of a regression with the single variable omitted vs the $\sserr$ when all of the variables are included. 
+
+We will use $A_j'$ to denote the affine function with the constraint $a_j=0$ that results in the smallest $\sigma_{Y^*-A_j'(X^*)}^2$ possible. The model $A_j'$ is based on $k-1$ parameters and therefore has $n-k$ degrees of freedom. The relative coefficient of determination between $A$ and $A_j'$ is therefore
+\begin{align*}
+{r_j^*}^2&=\frac{{\sigma^*}^2_{Y-A_j'(X)}-{\sigma^*}^2_{Y-A(X)}}{{\sigma^*}^2_{Y-A_j'(X)}}\\
+    &=1-\frac{\sum_{i=1}^n(A(x_i)-y_i)^2/(n-k-1)}{\sum_{i=1}^n(A_j'(x_i)-y_i)^2/(n-k)}\\
+    &=1-\frac{(n-k)\sum_{i=1}^n(A(x_i)-y_i)^2}{(n-k-1)\sum_{i=1}^n(A_j'(x_i)-y_i)^2}
+\end{align*}
+We will use this to indicate how much each individual parameter contributes to the overall model. Parameters with small relative coefficients of determination may be omitted from the model without losing accuracy in our predictions.

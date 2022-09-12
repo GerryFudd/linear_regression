@@ -1,0 +1,41 @@
+\subsection{Some linear algebra concepts}
+
+This exercise is all about finding a function that will take a list of independent variables as an input and output a prediction of a single response value. The standard practice for finding this sort of prediction function is to assume that the relationship between all of the independent variables and the dependent variable is linear. Natrually we begin with some definitions from linear algebra.
+
+\begin{definition}[$\mathbb{R}^n$]
+
+	The set of all lists of $n$ real numbers is denoted $\mathbb{R}^n$. It is possible to add these lists
+	$$[a_1,...,a_n]+[b_1,...,b_n]:=[a_1+b_1,...,a_n+b_n]$$
+	where the resulting list is formed by adding the numbers at the corresponding indices. It is possible to scale these lists
+	$$s[a_1,...,a_n]:=[sa_1,...,sa_n]$$
+	where the resulting list is formed by multiplying each value from the original list by the same number.
+
+	It is also possible to take a ``dot product" of these lists that results in a single number.
+	$$[a_1,...,a_n]\cdot[b_1,...,b_n]:=a_1b_1+...+a_nb_n$$
+\end{definition}
+
+The previous definition is a formal way of saying that we will treat lists of numbers as vectors. We don't need to worry about the abstract notion of ``what is a vector?'' but we \emph{can} move forward with the understanding that we will always treat these lists as vectors.
+
+It is worth noting that $\mathbb{R}$ is also a vector space that behaves exactly the same as $\mathbb{R}^1$ (althogh the data structures for eg 5 and [5] are not identical).
+
+\begin{definition}[LINEAR MAPPING]
+
+A LINEAR MAPPING is a function $L:\mathbb{R}^n\to\mathbb{R}$ that satisfies the following special properties for all $a,b\in\mathbb{R}^n$ and $s\in\mathbb{R}$.
+\begin{enumerate}
+	\item $L(a+b)=L(a)+L(b)$ and
+	\item $L(sa)=sL(a)$.
+\end{enumerate}
+\end{definition}
+
+This abstract definition of a linear mapping doesn't immediately suggest how this sort of funciton could be defined concretely. It's fortunately straightforward to make this definition concrete. Suppose that $L$ is a linear mapping and consider what $L$ does to the lists $e_1=[1,0,...]$, $e_2=[0,1,0,...]$, etc. where $e_i$ is a list that contains the number 1 in the ith place and 0's everywhere else. Define the numbers $l_i:=L(e_i)$ and note that these numbers completely describe what $L$ does to \emph{any} list $a=[a_1,...,a_n]$. Note that $a=a_1e_1+...+a_ne_n$ and therefore the above definition implies that $L$ is equivalent to taking a dot product.
+\begin{align*}
+	L(a)&=a_1L(e_1)+...+a_nL(e_n)\\
+	&=a\cdot[l_1,...,l_n]
+\end{align*}
+
+\begin{definition}[AFFINE MAPPING]
+
+An AFFINE MAPPING is function $A:\mathbb{R}^n\to\mathbb{R}$ that can be written as $A(x)=a_0+L(x)$ where $L$ is a linear mapping.
+\end{definition}
+
+Sometimes people will use the term linear to describe affine mappings as well as linear mappings, but I prefer to be more precise (this is math after all). In terms of bookkeeping an affine mapping will in general be defined by a list of $n+1$ values $[a_0,...,a_n]$ and may be evaluated as $A(x)=[a_0,...,a_n]\cdot[1,x_1,...,x_n]$.

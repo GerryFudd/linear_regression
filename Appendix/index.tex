@@ -1,0 +1,44 @@
+\section{Appendix}
+\subsection{Row operations and reduced row echelon form}
+\label{reduced row echelon}
+A system of linear equations is a list of equations
+\begin{align*}
+	(c_1)_1v_1+...+(c_1)_nv_n&=d_1\\
+	...&\\
+	(c_m)_1v_1+...+(c_m)_nv_n&=d_m
+\end{align*}
+in the variables $v_1,...,v_n$ where all of the $(c_i)_j$ and $d_i$ are constants.
+
+If a particular $v=[v_1,...,v_n]$ satisfies the equation
+$$(c_i)_1v_1+...+(c_i)_nv_n=d_i,$$
+then for any number $s$ it will also satisfy
+$$s(c_i)_1v_1+...+s(c_i)_nv_n=sd_i.$$
+Likewise, if a particular $v=[v_1,...,v_n]$ satisfies both
+\begin{align*}
+	(c_i)_1v_1+...+(c_i)_nv_n&=d_i\text{ and}\\
+	(c_j)_1v_1+...+(c_j)_nv_n&=d_j,
+\end{align*}
+then it will satisfy
+$$\left[(c_i)_1+(c_j)_1\right]v_1+...+\left[(c_i)_n+(c_j)_n\right]v_n=d_i+d_j.$$
+This means that we can treat each equation as a vector $u_i=[(c_i)_1,...,(c_i)_n,d_i]$. If two vectors $u_i$ and $u_j$ are part of a system of linear equations, then $u_i+u_j$ is also part of that system and so is $su_i$ for any number $s$.
+
+Let's use $e_i$ to represent the coordinate vector where $(e_i)_i=1$ and $(e_i)_j=0$ whenever $i\neq j$. If you can use the row operations above to find a vector $[(e_i)_1,...,(e_i)_n,a_i]$, which represents the equation $v_i=a_i$, then we know that any solution $v$ must have the value $a_i$ in its $i$th index. This provides a procedural way to solve $n$ equations for $n$ unknown numbers. Write these equations as an $n$ by $n+1$ matrix
+$$M=\begin{bmatrix}
+	(c_1)_1&...&(c_1)_n&d_1\\
+	\vdots&&\vdots&\vdots\\
+	(c_n)_1&...&(c_n)_n&d_n\\
+\end{bmatrix}$$
+and then repeat these steps in order for each $1\leq p \leq n$.
+\begin{enumerate}
+	\item If $(c_p)_p\neq 0$, then replace row $c_p$ with $\frac{1}{(c_p)_p}c_p$. This guarantees that index $(c_p)_p=1$.
+	\begin{enumerate}
+		\item If $(c_p)_p=0$, then look through the rows $c_{p+1},...,c_n$ until you find one where $(c_i)_p\neq0$.
+		\begin{enumerate}
+			\item If no such row exists, it is impossible to determine a unique value for $v_p$ and the system of equations is not solvable. Terminate the process.
+		\end{enumerate} 
+		\item If such a row $c_i$ exists, swap row $c_p$ with $c_i$ and start step (1) over again for index $p$.
+	\end{enumerate}
+	\item For each row $c_q\neq c_p$ replace it with $c_q + -1 * (c_q)_pc_p$. This guarantees that $(c_q)_p=0$.
+\end{enumerate}
+This process will eventually terminate at step 1.a.i if there is not a unique solution or it will terminate because these operations have been done to every index from 1 to $n$. If this process loops through every row, then it guarantees that row $i$ is a vector of the form $[(e_i)_1,...,(e_i)_n,a_i]$ and therefore the system of equations has a unique solution $v=[a_1,...,a_n]$.
+\end{document} 
